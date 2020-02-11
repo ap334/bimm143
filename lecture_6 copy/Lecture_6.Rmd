@@ -1,0 +1,255 @@
+---
+title: "class6"
+author: "Anastasia Pimentel"
+date: "1/23/2020"
+output: html_document
+---
+
+# hello
+## hello
+### hello
+```{r}
+# hello
+plot(1:4)
+```
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+x <- 5
+
+plot(sin(x), col="green")
+```
+
+<http://www.google.com>
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+### Lecture 6
+
+About readtables: 
+
+
+```{r}
+# Example of read.table. For read.table header is by default false, but for all other read.blah header is by default false.
+# read.table("your file name", header="TRUE", sep="\t")
+```
+
+```{r}
+t1 <- read.table("test1.txt")
+```
+
+```{r}
+t1 <- read.table("test1.txt", sep = ",", header=TRUE)
+t1
+```
+
+```{r}
+t1 <- read.csv("test1.txt")
+t1
+
+```
+
+
+
+```{r}
+t2 <- read.table("test2.txt", sep="$", header=TRUE)
+t2
+```
+
+
+
+```{r}
+t3 <- read.table("test3.txt")
+t3 
+```
+
+Time to make some functions. We'll make an add function!
+
+```{r}
+# making a function
+add <- function(x, y=1) {
+  #Sum the input x and y
+  x+y
+}
+```
+
+
+Let's use this funtion!
+
+```{r}
+add(4)
+add(1,2)
+add(c(1,2,3,4))
+add(c(1,2,3,4), 100)
+add(c(1,2,3,4), c(1,2,3,4))
+
+```
+Looks good.
+
+Now to make a different function, one that uses the range function, so we'll test it.
+
+```{r}
+# What deos range() do?
+x <- c(1, 2, 3, 4, 5, 18, 6)
+range(x)
+```
+
+Time to make up our function. 
+```{r}
+# Our made-up function. 
+x <- c(1, 2, 3, 4, 5, 18, 6)
+
+rescale <- function(x) {
+   rng <-range(x)
+   (x - rng[1]) / (rng[2] - rng[1])
+}
+   
+rescale(x)
+```
+
+Looks good!
+Let's see if it will break if one of the values is NA.
+
+```{r}
+# Our made-up function. Doesn't work if one of the tings is NA!
+x <- c(1, 2, 3, NA, 5, 18, 6)
+
+rescale <- function(x) {
+   rng <-range(x)
+   (x - rng[1]) / (rng[2] - rng[1])
+}
+   
+rescale(x)
+```
+
+Now let's fix the function!
+
+```{r}
+# Our made-up function, fixed. na.rm is by default FALSE, so NA values aren't accepted, so we need to change it to TRUE.
+x <- c(1, 2, 3, NA, 5, 18, 6)
+
+range(x, na.rm=TRUE)
+
+rescale <- function(x) {
+   rng <-range(x, na.rm=TRUE)
+   (x - rng[1]) / (rng[2] - rng[1])
+  
+}
+   
+rescale(x)
+```
+Fixed!
+
+Another made-up function:
+```{r}
+y <- c(1,2,3)
+
+rescale <- function(x, na.rm=TRUE, plot=FALSE) {
+    rng <-range(x, na.rm=na.rm)
+    print("Hello")
+   answer <- (x - rng[1]) / (rng[2] - rng[1])
+   print("is it me you are looking for?")
+   if(plot) {
+      plot(answer, typ="b", lwd=4)
+   }
+   print("I can see it in ...")
+   return(answer)
+}
+
+
+rescale (y)
+```
+
+```{r}
+library(bio3d)
+s1 <- read.pdb("4AKE")  # kinase with drug
+s2 <- read.pdb("1AKE")  # kinase no drug
+s3 <- read.pdb("1E4Y")  # kinase with drug
+
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+
+Q1: read.pdb returns a list of 8 compontants (and class "pdb"
+Q2: trim.pdb returens a subset of the read.pdb
+Q3: SSE controls the rectangules, and they represent secondary structures, in this case particular chains. 
+Q4: We should combine the plots!
+```{r}
+library(bio3d)
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor", col="blue")
+points(s2.b, typ="l", col="green")
+points(s3.b, typ="l", col="red")
+
+```
+
+
+Q5: We can see that S2 AND S3 are more closley related than to S1.
+```{r}
+
+hc <- hclust( dist( rbind(s1.b, s2.b, s3.b) ) )
+plot(hc)
+```
+
+```{r eval=FALSE}
+s1 <- read.pdb("4AKE")  # kinase with drug
+
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+
+s1.b <- s1.chainA$atom$b
+
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+```
+
+
+```{r}
+# New function
+
+myf <- function(file) {
+x <- read.pdb(file)  
+xt <- trim.pdb(x, chain="A", elety="CA")
+xb <- xt$atom$b
+plotb3(xb, sse=s1.chainA, typ="l", ylab="Bfactor")
+}
+
+myf("1AKE")
+
+```
+
+```{r}
+x <- read.pdb("1AKE") 
+xt <- trim.pdb(x, chain="A", elety="CA")
+xb <- xt$atom$b
+plotb3(xb, sse=s1.chainA, typ="l", ylab="Bfactor")
+```
+

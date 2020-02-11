@@ -1,0 +1,133 @@
+---
+title: "lecture_7"
+author: "Anastasia Pimentel"
+date: "1/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+source("http://tinyurl.com/rescale-R")
+```
+
+
+Our funtion!
+```{r}
+rescale <- function(x, na.rm=TRUE, plot=FALSE, ...) {
+  # Our rescale function from the end of lecture 9
+
+  if(na.rm) {
+    rng <-range(x, na.rm=TRUE)
+  } else {
+    rng <-range(x)
+  }
+
+  answer <- (x - rng[1]) / (rng[2] - rng[1])
+  if(plot) { 
+    plot(answer, ...) 
+  }
+
+  return(answer)
+}
+
+
+```
+
+#Now we add warnig and stop. stop() breaks the function and sends a message, warning() just sends a message. 
+```{r}
+#Better na fucntion:
+is_both_na <- function(x,y){
+  if(length(x) != length(y)){
+    stop("Your inputs aren't the same length")
+  }
+is.na(x) & is.na(y)
+}
+
+
+  # Our rescale function from the end of lecture 9
+rescale <- function(x, na.rm=TRUE, plot=FALSE, ...) {
+
+if( !is.numeric(x) ) {
+      stop("Input x should be numeric", call.=FALSE)
+   }
+  
+  if(na.rm) {
+    rng <-range(x, na.rm=TRUE)
+  } else {
+    rng <-range(x)
+  }
+
+  answer <- (x - rng[1]) / (rng[2] - rng[1])
+  if(plot) { 
+    plot(answer, ...) 
+  }
+
+  return(answer)
+}
+```
+
+
+
+
+
+
+To find intersections: 
+
+```{r}
+g1 <- df1$IDs
+g2 <- df2$IDs
+intersect(g1, g2)
+
+
+#elements of g1 in g2
+g1 %in% g2
+g1[g1 %in% g2]
+
+
+#elements of g2 in g1
+g2 %in% g1
+g2[g2 %in% g1]
+
+
+gint <- function(g1, g2) {
+  cbind(g1[g1 %in% g2], g2[g2 %in% g1])
+}
+
+gint(g1,g2)
+
+
+
+
+
+gint2<- function(df1, df2) {
+  cbind(df1[df1$IDs %in% df2$IDs,], df2[df2$IDs %in% df1$IDs,], )}
+  
+  
+gint3<- function(df1, df2, gene.colname = "IDs") {
+  
+  cbind(df1[df1[,gene.colname] %in% df2[,gene.colname],],
+        df2[df2$[,gene.colname] %in% df1[,gene.colname],], "exp")
+  
+  
+}
+```
+
+
+Now practice with Packages
+We'll work with ggplot2, which only takes data frames
+```{r}
+myplot <- ggplot(data=iris, aes(x=Sepal.Length, y= Sepal.Width, color=Species)) +
+  geom_point(aes(shape=Species), size=3) + geom_smooth(method ="lm")
+
+myplot2 <- ggplot(data=iris, aes(x=Sepal.Length, y= Sepal.Width, color=Species)) +
+  geom_bar() 
+
+myplot
+myplot2
+
+
+```
+

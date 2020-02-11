@@ -1,0 +1,44 @@
+---
+title: "HW1_30_20"
+author: "Anastasia Pimentel"
+date: "1/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+My function for the homework due 1/30/20.
+
+```{r}
+library(bio3d)
+
+#Function for plotting the temperture factor (b factor) of residues of a protein.
+plotpbd <- function(file) {
+  #Above the function takes in a PDB file name input 
+myprotein <- read.pdb(file)  
+  #The function saves the data that R reads from the file
+trimmed_protein <- trim.pdb(myprotein, chain = "A", elety = "CA")
+  #Then the funtion saves a subset of that data, a particualr chain and atom type
+temp_atoms_protein <- trimmed_protein$atom$b
+  #Here the function looks at just the temperature factor of the atoms from that subset of data
+plotb3(temp_atoms_protein, sse = trimmed_protein, typ = "l", ylab = "Bfactor")
+}
+ #Finally, the function returns a plot of the temperature factor along the residues, with the additional secondary structure info in the margins.
+
+
+
+plotpbd("4AKE")  
+
+```
+
+
+
+
+
+
