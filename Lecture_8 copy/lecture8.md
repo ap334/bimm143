@@ -1,17 +1,9 @@
----
-title: "lecture 8"
-author: "Anastasia Pimentel"
-date: "1/30/2020"
-output: github_document
----
+lecture 8
+================
+Anastasia Pimentel
+1/30/2020
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r}
-
-
+``` r
 ## This function will generate random substrings from the larger reference sequence 
 GenerateSimulatedReads <- function(refSequence, readLength, numberOfReadsToSimulate) {
   
@@ -50,21 +42,21 @@ AlignToReference <- function(meSimReads=methylatedSimulatedReads, refSequence, r
    refCGpositions <- grep("CG",substring(refSequence,1:(nchar(refSequence)-1),2:nchar(refSequence)))
    coverageVector=replicate( 2, numeric(nchar(refSequence)))
    for(i in 1:nrow(methylatedSimulatedReads)) {
-	 if (length(which(adist(allKmers, methylatedSimulatedReads$methylatedSeq[i])==0,))==1){
-		for (j in meSimReads$startPositions[i]:meSimReads$endPositions[i]){
-	       coverageVector[j,1]=coverageVector[j,1]+1
-		}
-	 }
-   	 else if (length(which(adist(allKmers, methylatedSimulatedReads$methylatedSeq[i])<=numberOfMismatches,))==1){
-		for (j in meSimReads$startPositions[i]:meSimReads$endPositions[i]){
-	       coverageVector[j,2]=coverageVector[j,2]+1
-		}
-	 }
-	}
-	CpGs=coverageVector[refCGpositions,1]
-	TpGs=coverageVector[refCGpositions,2]
-	methylationSummary=cbind(refCGpositions, CpGs, TpGs, methylatedFraction=CpGs/(CpGs+TpGs))
-	print (methylationSummary)
+     if (length(which(adist(allKmers, methylatedSimulatedReads$methylatedSeq[i])==0,))==1){
+        for (j in meSimReads$startPositions[i]:meSimReads$endPositions[i]){
+           coverageVector[j,1]=coverageVector[j,1]+1
+        }
+     }
+     else if (length(which(adist(allKmers, methylatedSimulatedReads$methylatedSeq[i])<=numberOfMismatches,))==1){
+        for (j in meSimReads$startPositions[i]:meSimReads$endPositions[i]){
+           coverageVector[j,2]=coverageVector[j,2]+1
+        }
+     }
+    }
+    CpGs=coverageVector[refCGpositions,1]
+    TpGs=coverageVector[refCGpositions,2]
+    methylationSummary=cbind(refCGpositions, CpGs, TpGs, methylatedFraction=CpGs/(CpGs+TpGs))
+    print (methylationSummary)
 }
 
 # refSequence = "CGGGATGAAGGCCCCCGA"
@@ -82,6 +74,11 @@ methylationProbability=0.8# on average 1 minus this fraction of reads will have 
 simulatedReads  <- GenerateSimulatedReads(refSequence=refSeq, readLength=readLen, numberOfReadsToSimulate=noOfSimReads)
 methylatedSimulatedReads <- ConvertCG(simulatedReads, methylationProbability)
 methylationSummary  <- AlignToReference(methylatedSimulatedReads, refSeq, readLen)
-
 ```
 
+    ##      refCGpositions CpGs TpGs methylatedFraction
+    ## [1,]              1   19    4          0.8260870
+    ## [2,]             16   70   10          0.8750000
+    ## [3,]             25   68   20          0.7727273
+    ## [4,]             34   72    9          0.8888889
+    ## [5,]             44   57   12          0.8260870
