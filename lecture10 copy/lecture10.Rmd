@@ -2,7 +2,7 @@
 title: "lecture10"
 author: "Anastasia Pimentel"
 date: "2/6/2020"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Importing our data from University of Wisconsion Medical Center.
 ```{r}
 wisc.df <- read.csv("WisconsinCancer.csv")
-wisc.df
+
 
 ```
 Viewing the data:
@@ -25,7 +25,7 @@ The data has a weird empty X column! Let's clean this up and get rid of it.
 Convert columns data 3-32 to a matrix. We don't include the frist two columns because they aren't directly related to the biopsy data. 
 ```{r}
 wisc.data <- as.matrix(wisc.df[,3:32])
-wisc.data
+
 ```
 
 How many patients are in the matrix?
@@ -124,9 +124,9 @@ xxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ```{r}
 pr.var <- wisc.pr$sdev^2
-pr.var
+
 pve <- wisc.pr$x/pr.var
-pve
+
 
 plot(pve)
 ```
