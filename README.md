@@ -2,6 +2,6 @@
 
 ##Class work from BIMM 143
 
-##updated. 
+##updated2. 
 
 hey
