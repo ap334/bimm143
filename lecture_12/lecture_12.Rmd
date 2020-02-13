@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+>Q1: Download a CSV file from the PDB site (accessible from “Analyze” -> “PDB Statistics” > “by Experimental Method and Molecular Type”. Move this CSV file into your RStudio project and determine the percentage of structures solved by X-Ray and Electron Microscopy. Also can you determine what proportion of structures are protein? Aim to have a rendered GitHub document with working code that yields your answers.
+
+```{r}
+stats <- read.csv("Data Export Summary.csv", row.names=1)
+stats
+```
+```{r}
+ans <- stats$Total/sum(stats$Total) *100
+names(ans) <- rownames(stats)
+ans
+```
+
+```{r}
+sum(stats$Proteins)/sum(stats$Total) *100
+```
+
+
+>Q2: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?
