@@ -1,0 +1,30 @@
+---
+title: "HIV-Pr"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Downloading and seperating the HIV-Pr receptor structure.
+We'll download the structure (1hsg) from PDB, then remove the bound drug from Merk and write out a protein only and ligand only new set of PDB files. 
+```{r}
+library(bio3d)
+
+"1hsg" <- get.pdb("1hsg")
+
+hiv <- read.pdb("1hsg")
+
+
+protein <- atom.select(hiv, "protein", value=TRUE)
+write.pdb(protein, file="1hsg_protein.pdb") 
+
+
+ligand <- atom.select(hiv, "ligand", value=TRUE)
+write.pdb(ligand, file="1hsg_ligand.pdb") 
+ligand
+```
+
