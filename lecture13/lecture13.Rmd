@@ -28,3 +28,10 @@ write.pdb(ligand, file="1hsg_ligand.pdb")
 ligand
 ```
 
+
+Read docking results
+```{r}
+res <- read.pdb("all.pdbqt", multi=TRUE)
+write.pdb(res, "results.pdb")
+```
+
