@@ -1,0 +1,34 @@
+---
+title: "lecture14"
+author: "Anastasia Pimentel"
+date: "2/25/2020"
+output: html_document
+---
+
+##Analyzing RNA-seq by genotype results
+
+Here we read the results of the RNA-Seq for about 230 people with different genotypes for the rs8067378 Asthma associated SNP. 
+
+```{r}
+genes <- read.table("rs8067378_ENSG00000172057.6.txt")
+head(genes)
+```
+
+Extract the A/A rows.
+```{r}
+AA <- genes$geno == "A/A"
+AA1 <- genes[AA, ]
+AA1
+mAA <- mean(AA1$exp)
+
+
+
+GG <- genes$geno == "G/G"
+GG1 <- genes[GG, ]
+GG1
+mGG <- mean(GG1$exp)
+
+boxplot(exp ~ geno, data=genes)
+```
+
+
